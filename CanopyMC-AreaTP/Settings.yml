@@ -1,0 +1,84 @@
+# ======================================================================================
+#   _____                              __  __  _____                         _______    
+#  / ____|                            |  \/  |/ ____|      /\               |__   __|   
+# | |     __ _ _ __   ___  _ __  _   _| \  / | |   ______ /  \   _ __ ___  __ _| |_ __  
+# | |    / _` | '_ \ / _ \| '_ \| | | | |\/| | |  |______/ /\ \ | '__/ _ \/ _` | | '_ \ 
+# | |___| (_| | | | | (_) | |_) | |_| | |  | | |____    / ____ \| | |  __/ (_| | | |_) |
+#  \_____\__,_|_| |_|\___/| .__/ \__, |_|  |_|\_____|  /_/    \_\_|  \___|\__,_|_| .__/ 
+#                         | |     __/ |                                          | |    
+#                         |_|    |___/                                           |_|    
+#                                   Configuration File
+# ======================================================================================
+#
+#
+# [INFO] 
+# These are the messages the plugin uses. All message support Colour
+# by using either the & or & symbols.
+# Variables:
+#       {DELAY} - Gets the TimeInSeconds value from the TeleportDelay Section. 
+Messages:
+  #
+  # This message is sent to the player when they teleport.
+  TeleportSuccess: "&aTeleporting..."
+  #
+  # If you're using the Teleport Dealy, this message will be sent to the
+  # player at the start of the countdown, before they teleport.
+  AboutToTeleport: "&eStand still for &6{DELAY} &eseconds, and you will be teleported."
+  #
+  # If you're using the Teleport Delay, AND you have CancelOnMove set to TRUE,
+  # this message will be sent to the player if they move causeing the Teleport
+  # to be cancelled.
+  PlayerMoved: "&cClaim Teleport has been cancelled because you moved."
+  #
+  # The /claimteleport command should be used like this:
+  # "/claimteleport <Claim Selection>" - <Claim Selection> MUST be a whole number.
+  #
+  # If the player tries to input something other than a whole number into the
+  # command, they will recieve this message.
+  InvalidInput: "&cPlease use a numeric value such as &7'&60&7'&c."
+  #
+  # The plugin uses Zero Based Indexing. For example, a list containing 5 Claims
+  # would range from 0-4, not 1-5.
+  # 
+  # So, if a player has 5 available claims, and inputs a valid number that
+  # isn't between 0 and 4, they will be sent this message.
+  InvalidClaim: "&cInvalid Choice."
+  #
+  # For players who have the 'ctp.others' permission:
+  #
+  # If a player tries to teleport to a claim belonging to someone who either
+  # doesn't exist, or doesn't have any claims, they will be sent this message.
+  InvalidPlayer: "&cCouldn't find any claim data for that player."
+  #
+  # If a player uses /claimteleport and they don't have any claims that they can 
+  # teleport to, they will be sent this message.
+  NoClaimData: "&eYou haven't made any claims yet."
+  #
+  # If a player tries to use any of the commands in this plugin, and they don't
+  # have permission to do so, they will be sent this message.
+  NoPermission: "&cYou do not have access to that!"
+#
+#
+# [INFO]
+# The plugin has various sound effects triggered by teleporting, performing
+# commands and other actions.
+#
+# If you would like to use these Sound Effects, set EnableSound to TRUE.
+# Otherwise, set it to FALSE to disable the Sounds.
+EnableSound: true
+#
+# [INFO]
+# The Teleport Delay (Or Countdown) is used to delay the teleport. This is useful
+# if you don't want players to be able to teleport out of certain situations instantly.
+TeleportDelay:
+  #
+  # How long should the delay be, in seconds? Set to 0 or lower to disable.
+  TimeInSeconds: 3.5
+  #
+  # Should the teleport be cancelled if the player moves?
+  CancelOnMove: true
+#
+#
+#
+#
+# Congratulations. You've reached the end of the Config.

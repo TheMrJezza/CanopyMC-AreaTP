@@ -1,0 +1,35 @@
+# ======================================================================================
+#   _____                              __  __  _____                         _______    
+#  / ____|                            |  \/  |/ ____|      /\               |__   __|   
+# | |     __ _ _ __   ___  _ __  _   _| \  / | |   ______ /  \   _ __ ___  __ _| |_ __  
+# | |    / _` | '_ \ / _ \| '_ \| | | | |\/| | |  |______/ /\ \ | '__/ _ \/ _` | | '_ \ 
+# | |___| (_| | | | | (_) | |_) | |_| | |  | | |____    / ____ \| | |  __/ (_| | | |_) |
+#  \_____\__,_|_| |_|\___/| .__/ \__, |_|  |_|\_____|  /_/    \_\_|  \___|\__,_|_| .__/ 
+#                         | |     __/ |                                          | |    
+#                         |_|    |___/                                           |_|    
+#                                    Plugin Yaml File
+# ======================================================================================
+
+
+name: CanopyMC-AreaTP
+main: com.canopymc.area_tp.ATMain
+version: 2.0.0
+authors: [TheMrJezza]
+website: www.canopymc.com
+softdepend: [GriefPrevention]
+commands:
+  areateleport:
+    description: Teleport to a Claim.
+    usage: /<command> <claim index>
+    aliases: [ctp, atp, claimtp, areatp, claimteleport]
+  atpreload:
+    aliases: [areateleportreload, claimteleportreload, ctpreload]
+    usage: /<command>
+    description: Reload AreaTp
+permissions:
+  canopymc.areateleport.reload:
+    default: op
+  canopymc.areateleport.use:
+    default: op
+  canopymc.areateleport.other:
+    default: op
