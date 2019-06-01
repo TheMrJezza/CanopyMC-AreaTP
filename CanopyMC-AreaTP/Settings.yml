@@ -73,7 +73,7 @@ EnableSound: true
 TeleportDelay:
   #
   # How long should the delay be, in seconds? Set to 0 or lower to disable.
-  TimeInSeconds: 3.5
+  TimeInSeconds: 5
   #
   # Should the teleport be cancelled if the player moves?
   CancelOnMove: true
