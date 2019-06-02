@@ -44,7 +44,7 @@ Messages:
   # isn't between 0 and 4, they will be sent this message.
   InvalidClaim: "&cInvalid Choice."
   #
-  # For players who have the 'ctp.others' permission:
+  # For players who have the 'canopymc.areateleport.others' permission:
   #
   # If a player tries to teleport to a claim belonging to someone who either
   # doesn't exist, or doesn't have any claims, they will be sent this message.
@@ -57,6 +57,19 @@ Messages:
   # If a player tries to use any of the commands in this plugin, and they don't
   # have permission to do so, they will be sent this message.
   NoPermission: "&cYou do not have access to that!"
+  #
+  # If a player tries to use a command that requires them to be inside of a claim,
+  # and they are not in a claim, they will be sent this message.
+  NotInClaim: "&cYou must be standing in a claim to do that!"
+  #
+  # If a player tries to alter claimhome data for a claim they don't own, they
+  # will be sent this message.
+  NoClaimAccess: "&cYou do not have access to this claim."
+  #
+  # If a claim is below the MinimumAreaThreshold, it won't be available for claimhome
+  # mechanics. If a player attempts to set a claimhome in a claim that is too small, 
+  # they will recieve this message.
+  AreaBelowThreshold: "&cThis claim is too small for that."
 #
 #
 # [INFO]
@@ -79,5 +92,14 @@ TeleportDelay:
   CancelOnMove: true
 #
 #
+# [INFO]
+# The plugin checks the amount of claimblocks a claim takes up ("The Area") while assessing it.
+# If the area of a claim is less than the MinimumAreaThreshold, it will not be available for
+# teleportation or claimhomes.
+# 
+# What should the MinimumAreaThreshold be? Anything less than 0 will be considered 0.
+MinimumAreaThreshold: 300
 #
+#
+# [INFO]
 # Congratulations. You've reached the end of the Config.

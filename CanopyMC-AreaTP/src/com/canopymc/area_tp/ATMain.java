@@ -49,7 +49,7 @@ public class ATMain extends JavaPlugin implements Listener {
 	}
 
 	public void info(String input) {
-		Bukkit.getConsoleSender().sendMessage("§7[§aAreaTp§7] §e" + input);
+		Bukkit.getConsoleSender().sendMessage(String.format("§7[§a%s§7] §e", getDescription().getName()) + input);
 	}
 
 	public static ATMain getInstance() {
@@ -67,8 +67,8 @@ public class ATMain extends JavaPlugin implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onPlayerMove(PlayerMoveEvent evt) {
-		if (!Settings.cancelOnMove()) return;
-		if (evt.getFrom().distance(evt.getTo()) <= 0.1) return;
+		if (!Settings.cancelOnMove() || evt.getFrom().distance(evt.getTo()) <= 0.1)
+			return;
 		BukkitTask task = delays.remove(evt.getPlayer().getUniqueId());
 		if (task != null) {
 			task.cancel();

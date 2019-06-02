@@ -4,6 +4,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
+import com.canopymc.area_tp.ATMain;
 import com.canopymc.area_tp.Settings;
 
 public class ATPReloadCMD implements CommandExecutor {
@@ -14,7 +15,7 @@ public class ATPReloadCMD implements CommandExecutor {
 			return true;
 		}
 		Settings.updateSettings();
-		cs.sendMessage("§a§7[§aAreaTP§7] §aConfig Reloaded");
+		cs.sendMessage("§a§7[§a" + ATMain.getInstance().getDescription().getName() + "§7] §aConfig Reloaded");
 		return true;
 	}
 }
