@@ -6,7 +6,7 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="D:/Jeremys Stuff/Spigot Stuff/Various Plugins/GriefPrevention.jar"/>
-	<classpathentry kind="lib" path="D:/Jeremys Stuff/Spigot Stuff/BuildTools/spigot-1.14.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/jerem/Desktop/Spigot Server/plugins/GriefPrevention.jar"/>
+	<classpathentry kind="lib" path="C:/Users/jerem/Desktop/Spigot 1.14/spigot.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

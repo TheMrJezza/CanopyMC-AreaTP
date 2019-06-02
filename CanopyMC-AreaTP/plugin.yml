@@ -18,6 +18,18 @@ authors: [TheMrJezza]
 website: www.canopymc.com
 softdepend: [GriefPrevention]
 commands:
+  areahome:
+    description: Teleport to a Claim Home.
+    usage: /<command> <claim name>
+    aliases: [claimhome, ahome, chome]
+  areadelhome:
+    description: Delete a Claim Home.
+    usage: /<command> <claim name>
+    aliases: [adhome, cdhome, claimdelhome, adelhome, cdelhome]
+  areasethome:
+    description: Create a Claim Home.
+    usage: /<command> <claim name>
+    aliases: [ashome, cshome, claimsethome, asethome, csethome]
   areateleport:
     description: Teleport to a Claim.
     usage: /<command> <claim index>
@@ -26,6 +38,10 @@ commands:
     aliases: [areateleportreload, claimteleportreload, ctpreload]
     usage: /<command>
     description: Reload AreaTp
+  areahomes:
+    aliases: [chomes, ahomes, claimhomes]
+    usage: /<command>
+    description: List your Claim Homes.
 permissions:
   canopymc.areateleport.reload:
     default: op

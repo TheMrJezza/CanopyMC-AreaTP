@@ -17,7 +17,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
 import com.canopymc.area_tp.commands.ATPReloadCMD;
+import com.canopymc.area_tp.commands.AreaDelhomeCMD;
+import com.canopymc.area_tp.commands.AreaHomeCMD;
+import com.canopymc.area_tp.commands.AreaSethomeCMD;
 import com.canopymc.area_tp.commands.AreaTPCMD;
+import com.canopymc.area_tp.common.AreaData;
 
 public class ATMain extends JavaPlugin implements Listener {
 	private PluginManager pm = Bukkit.getPluginManager();
@@ -34,17 +38,28 @@ public class ATMain extends JavaPlugin implements Listener {
 		}
 		instance = this;
 		Settings.updateSettings();
+		AreaHomeCMD cmd = new AreaHomeCMD();
 		getCommand("areateleport").setExecutor(new AreaTPCMD());
 		getCommand("atpreload").setExecutor(new ATPReloadCMD());
+		getCommand("areahome").setExecutor(cmd);
+		getCommand("areadelhome").setExecutor(new AreaDelhomeCMD());
+		getCommand("areasethome").setExecutor(new AreaSethomeCMD());
+		getCommand("areahomes").setExecutor(cmd);
 		pm.registerEvents(this, this);
 		new Metrics(this);
+		AreaData.loadData();
 		info("Plugin Loaded Successfully!");
 	}
 
 	public void onDisable() {
 		getCommand("areateleport").setExecutor(null);
 		getCommand("atpreload").setExecutor(null);
+		getCommand("areahome").setExecutor(null);
+		getCommand("areadelhome").setExecutor(null);
+		getCommand("areasethome").setExecutor(null);
+		getCommand("areahomes").setExecutor(null);
 		HandlerList.unregisterAll((Plugin) this);
+		AreaData.saveData();
 		instance = null;
 	}
 
