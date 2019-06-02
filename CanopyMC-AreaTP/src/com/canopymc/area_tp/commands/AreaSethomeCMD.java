@@ -80,7 +80,7 @@ public class AreaSethomeCMD implements CommandExecutor {
 		if (claim.parent != null) {
 			claim = claim.parent;
 		}
-		if (claim.isAdminClaim() || claim.ownerID.equals(player.getUniqueId())) {
+		if (claim.isAdminClaim() || !claim.ownerID.equals(player.getUniqueId())) {
 			// You cannot control this claim.
 			player.sendMessage(Settings.noClaimAccess());
 			return null;
