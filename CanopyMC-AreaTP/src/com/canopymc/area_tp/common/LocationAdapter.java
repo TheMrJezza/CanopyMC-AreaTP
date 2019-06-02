@@ -26,39 +26,41 @@ public class LocationAdapter extends TypeAdapter<Location> {
 				fieldname = reader.nextName();
 			}
 
-			if ("WORLD".equals(fieldname)) {
+			if ("world".equalsIgnoreCase(fieldname)) {
 				token = reader.peek();
 				world = Bukkit.getWorld(reader.nextString());
 			}
 
-			if ("X".equals(fieldname)) {
+			if ("x".equalsIgnoreCase(fieldname)) {
 				token = reader.peek();
 				x = reader.nextDouble();
 				continue;
 			}
 
-			if ("Y".equals(fieldname)) {
+			if ("y".equalsIgnoreCase(fieldname)) {
 				token = reader.peek();
 				y = reader.nextDouble();
 				continue;
 			}
 
-			if ("Z".equals(fieldname)) {
+			if ("z".equalsIgnoreCase(fieldname)) {
 				token = reader.peek();
 				z = reader.nextDouble();
 				continue;
 			}
 
-			if ("YAW".equals(fieldname)) {
+			if ("yaw".equalsIgnoreCase(fieldname)) {
 				token = reader.peek();
 				yaw = (float) reader.nextDouble();
 				continue;
 			}
 
-			if ("PITCH".equals(fieldname)) {
+			if ("pitch".equalsIgnoreCase(fieldname)) {
 				token = reader.peek();
 				pitch = (float) reader.nextDouble();
+				continue;
 			}
+			reader.peek();
 		}
 		reader.endObject();
 		if (world == null || x == null || y == null || z == null || yaw == null || pitch == null) {
@@ -70,17 +72,17 @@ public class LocationAdapter extends TypeAdapter<Location> {
 	@Override
 	public void write(JsonWriter writer, Location location) throws IOException {
 		writer.beginObject();
-		writer.name("WORLD");
+		writer.name("world");
 		writer.value(location.getWorld().getName());
-		writer.name("X");
+		writer.name("x");
 		writer.value(location.getX());
-		writer.name("Y");
+		writer.name("y");
 		writer.value(location.getY());
-		writer.name("Z");
+		writer.name("z");
 		writer.value(location.getZ());
-		writer.name("YAW");
+		writer.name("yaw");
 		writer.value(location.getYaw());
-		writer.name("PITCH");
+		writer.name("pitch");
 		writer.value(location.getPitch());
 		writer.endObject();
 	}

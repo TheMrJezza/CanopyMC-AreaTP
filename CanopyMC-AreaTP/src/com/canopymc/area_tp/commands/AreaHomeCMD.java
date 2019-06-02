@@ -29,24 +29,33 @@ public class AreaHomeCMD implements CommandExecutor {
 			cs.sendMessage("§cYou don't have any homes yet!");
 			return true;
 		}
-		if (args.length < 1 || cmd.getName().equalsIgnoreCase("areahomes")) {
-			StringBuilder sb = new StringBuilder("§eClaim Homes§7: §r");
-			boolean started = false;
-			for (AreaData home : homes) {
-				if (started)
-					sb.append("§7, §r");
-				else
-					started = true;
-				sb.append(home.getName());
+		if (args.length < 1) {
+			if (cmd.getName().equalsIgnoreCase("areahomes") || homes.size() > 1) {
+				StringBuilder sb = new StringBuilder("§eClaim Homes§7: §r");
+				boolean started = false;
+				for (AreaData home : homes) {
+					if (started)
+						sb.append("§7, §r");
+					else
+						started = true;
+					sb.append(home.getName());
+				}
+				sb.append("§7.");
+				cs.sendMessage(sb.toString() /*+ "\n§7>> §r/" + alias + " <home>"*/);
+				return true;
 			}
-			sb.append("§7.");
-			cs.sendMessage(sb.toString() /*+ "\n§7>> §r/" + alias + " <home>"*/);
+			Location loc = homes.get(0).getHome();
+			if (loc == null) {
+				player.performCommand("ahomes");
+				return true;
+			}
+			player.teleport(loc);
 			return true;
 		}
 		
 		AreaData nc = AreaData.getData(player.getUniqueId(), args[0]);
 		if (nc == null) {
-			player.performCommand("homes");
+			player.performCommand("ahomes");
 			return true;
 		}
 
