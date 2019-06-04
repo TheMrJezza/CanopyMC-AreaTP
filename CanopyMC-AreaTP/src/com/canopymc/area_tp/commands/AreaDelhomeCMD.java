@@ -7,7 +7,7 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import com.canopymc.area_tp.ATMain;
-import com.canopymc.area_tp.common.AreaData;
+import com.canopymc.area_tp.common.AreaDataOld;
 
 public class AreaDelhomeCMD implements CommandExecutor {
 	public boolean onCommand(CommandSender cs, Command cmd, String alias, String[] args) {
@@ -25,9 +25,9 @@ public class AreaDelhomeCMD implements CommandExecutor {
 		}
 		String name = args[0];
 
-		AreaData current = AreaData.getData(player.getUniqueId(), name);
+		AreaDataOld current = AreaDataOld.getData(player.getUniqueId(), name);
 		if (current != null) {
-			AreaData.remove(current);
+			AreaDataOld.remove(current);
 			cs.sendMessage("§aClaim Home Deleted!");
 			return true;
 		}

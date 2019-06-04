@@ -26,7 +26,26 @@ public class AreaSethomeCMD implements CommandExecutor {
 		Player player = (Player) cs;
 		Claim claim = getValidClaim(player);
 		if (claim != null) {
-			AreaData original = AreaData.getData(player.getUniqueId(), claim.getID());
+			if (AreaData.setAreaHome(claim.getID(), player.getLocation())) {
+				player.sendMessage("Claim Home Changed Successfully!");
+			} else
+				player.sendMessage("Claim Home Couldn't Be Changed!");
+		}
+		return true;
+	}
+
+	/*public boolean onCommand(CommandSender cs, Command cmd, String alias, String[] args) {
+		if (!(cs instanceof Player)) {
+			if (cs instanceof ConsoleCommandSender) {
+				ATMain.getInstance().info("§cOnly ingame players can excute this command");
+			} else
+				cs.sendMessage("§cOnly ingame players can excute this command");
+			return true;
+		}
+		Player player = (Player) cs;
+		Claim claim = getValidClaim(player);
+		if (claim != null) {
+			AreaDataOld original = AreaDataOld.getData(player.getUniqueId(), claim.getID());
 
 			if (args.length < 1) {
 				if (original != null) {
@@ -40,10 +59,10 @@ public class AreaSethomeCMD implements CommandExecutor {
 
 			String name = args[0];
 
-			AreaData nc = AreaData.getData(player.getUniqueId(), name);
+			AreaDataOld nc = AreaDataOld.getData(player.getUniqueId(), name);
 
 			if (original == null && nc == null) {
-				AreaData.createData(claim, name, player);
+				AreaDataOld.createData(claim, name, player);
 				cs.sendMessage(String.format(
 						"§aClaim home set to your location!\n§7>> §eUse §7/home %s §eto return to this location.",
 						name));
@@ -68,7 +87,7 @@ public class AreaSethomeCMD implements CommandExecutor {
 					original.getName()));
 		}
 		return true;
-	}
+	}*/
 
 	private Claim getValidClaim(Player player) {
 		Claim claim = GriefPrevention.instance.dataStore.getClaimAt(player.getLocation(), true, null);

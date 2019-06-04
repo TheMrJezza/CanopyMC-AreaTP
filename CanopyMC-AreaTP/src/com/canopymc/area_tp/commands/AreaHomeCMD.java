@@ -1,6 +1,7 @@
 package com.canopymc.area_tp.commands;
 
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -10,7 +11,7 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import com.canopymc.area_tp.ATMain;
-import com.canopymc.area_tp.common.AreaData;
+import com.canopymc.area_tp.common.AreaDataOld;
 
 public class AreaHomeCMD implements CommandExecutor {
 
@@ -24,7 +25,7 @@ public class AreaHomeCMD implements CommandExecutor {
 			return true;
 		}
 		Player player = (Player) cs;
-		ArrayList<AreaData> homes = AreaData.getHomes(player.getUniqueId());
+		ArrayList<AreaDataOld> homes = AreaDataOld.getHomes(player.getUniqueId());
 		if (homes.isEmpty()) {
 			cs.sendMessage("§cYou don't have any homes yet!");
 			return true;
@@ -33,7 +34,7 @@ public class AreaHomeCMD implements CommandExecutor {
 			if (cmd.getName().equalsIgnoreCase("areahomes") || homes.size() > 1) {
 				StringBuilder sb = new StringBuilder("§eClaim Homes§7: §r");
 				boolean started = false;
-				for (AreaData home : homes) {
+				for (AreaDataOld home : homes) {
 					if (started)
 						sb.append("§7, §r");
 					else
@@ -47,13 +48,15 @@ public class AreaHomeCMD implements CommandExecutor {
 			Location loc = homes.get(0).getHome();
 			if (loc == null) {
 				player.performCommand("ahomes");
+				Pattern pat = Pattern.compile("");
+				pat.matcher("").matches();
 				return true;
 			}
 			player.teleport(loc);
 			return true;
 		}
 		
-		AreaData nc = AreaData.getData(player.getUniqueId(), args[0]);
+		AreaDataOld nc = AreaDataOld.getData(player.getUniqueId(), args[0]);
 		if (nc == null) {
 			player.performCommand("ahomes");
 			return true;

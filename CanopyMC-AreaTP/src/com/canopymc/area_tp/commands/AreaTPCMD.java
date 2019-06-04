@@ -17,6 +17,7 @@ import org.bukkit.scheduler.BukkitTask;
 import com.canopymc.area_tp.ATMain;
 import com.canopymc.area_tp.Settings;
 import com.canopymc.area_tp.Sounds;
+import com.canopymc.area_tp.common.AreaData;
 import com.google.common.primitives.Ints;
 
 import me.ryanhamshire.GriefPrevention.Claim;
@@ -91,22 +92,17 @@ public class AreaTPCMD implements CommandExecutor {
 		teleport(player, claims.get(claimNum));
 	}
 
-	private Location getCentreOfClaim(Claim claim) {
-		Location greater = claim.getGreaterBoundaryCorner(), lesser = claim.getLesserBoundaryCorner();
-		int x1 = greater.getBlockX(), x2 = lesser.getBlockX();
-		int z1 = greater.getBlockZ(), z2 = lesser.getBlockZ();
-		int x = (x1 - x2) / 2 + x2, z = (z1 - z2) / 2 + z2, y = lesser.getWorld().getHighestBlockYAt(x, z);
-
-		return new Location(lesser.getWorld(), x + 0.5, y, z + 0.5);
-	}
-
 	public void teleport(Player player, Claim claim) {
 		BukkitTask current = ATMain.getCountdowns().remove(player.getUniqueId());
 		if (current != null) {
 			current.cancel();
 		}
 
-		Location centre = getCentreOfClaim(claim);
+		Location home = AreaData.getAreaHome(claim.getID());
+		if (home == null) {
+			ATMain.getInstance().info("HOME Location was NUll for AreaTP! Tell TheMrJezza.");
+			return;
+		}
 
 		int delay = (int) (20 * Settings.getTeleportDelay());
 		if (delay > 0) {
@@ -121,8 +117,8 @@ public class AreaTPCMD implements CommandExecutor {
 				}
 				count++;
 				if (count >= delay) {
-					centre.getChunk(); // Load the chunk
-					player.teleport(centre);
+					home.getChunk(); // Load the chunk
+					player.teleport(home);
 					player.sendMessage(Settings.teleportSuccess());
 					ATMain.getCountdowns().remove(player.getUniqueId());
 					new BukkitRunnable() {
@@ -146,7 +142,7 @@ public class AreaTPCMD implements CommandExecutor {
 		StringBuilder builder = new StringBuilder("§7==§6ID§7======[§6Available Claims§7]==========\n \n");
 
 		for (int i = 0; i < claims.size(); i++) {
-			Location centre = getCentreOfClaim(claims.get(i));
+			Location centre = AreaData.getAreaHome(claims.get(i).getID());
 			builder.append(String.format(" §7- §6%s §7(near X: §6%S §7Z: §6%s §7World: §6%s§7)\n", i,
 					centre.getBlockX(), centre.getBlockZ(), centre.getWorld().getName()));
 		}

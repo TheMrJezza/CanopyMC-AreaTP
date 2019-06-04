@@ -4,13 +4,10 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -22,10 +19,15 @@ import com.canopymc.area_tp.commands.AreaHomeCMD;
 import com.canopymc.area_tp.commands.AreaSethomeCMD;
 import com.canopymc.area_tp.commands.AreaTPCMD;
 import com.canopymc.area_tp.common.AreaData;
+import com.canopymc.area_tp.common.LocationAdapter;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
-public class ATMain extends JavaPlugin implements Listener {
+public class ATMain extends JavaPlugin {
 	private PluginManager pm = Bukkit.getPluginManager();
 	private static ATMain instance;
+	
+	private static Gson gson;
 
 	private static HashMap<UUID, BukkitTask> delays = new HashMap<>();
 
@@ -45,8 +47,12 @@ public class ATMain extends JavaPlugin implements Listener {
 		getCommand("areadelhome").setExecutor(new AreaDelhomeCMD());
 		getCommand("areasethome").setExecutor(new AreaSethomeCMD());
 		getCommand("areahomes").setExecutor(cmd);
-		pm.registerEvents(this, this);
+		pm.registerEvents(new Listeners(), this);
 		new Metrics(this);
+		GsonBuilder builder = new GsonBuilder();
+		builder.registerTypeAdapter(Location.class, new LocationAdapter());
+		builder.setPrettyPrinting();
+		gson = builder.create();
 		AreaData.loadData();
 		info("Plugin Loaded Successfully!");
 	}
@@ -80,14 +86,7 @@ public class ATMain extends JavaPlugin implements Listener {
 		return delays;
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onPlayerMove(PlayerMoveEvent evt) {
-		if (!Settings.cancelOnMove() || evt.getFrom().distance(evt.getTo()) <= 0.1)
-			return;
-		BukkitTask task = delays.remove(evt.getPlayer().getUniqueId());
-		if (task != null) {
-			task.cancel();
-			evt.getPlayer().sendMessage(Settings.teleportCancelled());
-		}
+	public static Gson getGson() {
+		return gson;
 	}
 }
