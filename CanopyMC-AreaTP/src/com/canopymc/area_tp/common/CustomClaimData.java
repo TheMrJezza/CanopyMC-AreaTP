@@ -1,3 +1,7 @@
+/*
+ * So... This is slightly less of a cluster fu*k than the old Data System... Still a cluster tho...
+ */
+
 package com.canopymc.area_tp.common;
 
 import java.io.BufferedWriter;
