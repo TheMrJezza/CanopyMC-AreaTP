@@ -26,7 +26,7 @@ import com.google.gson.GsonBuilder;
 public class ATMain extends JavaPlugin {
 	private PluginManager pm = Bukkit.getPluginManager();
 	private static ATMain instance;
-	
+
 	private static Gson gson;
 
 	private static HashMap<UUID, BukkitTask> delays = new HashMap<>();
@@ -49,10 +49,8 @@ public class ATMain extends JavaPlugin {
 		getCommand("areahomes").setExecutor(cmd);
 		pm.registerEvents(new Listeners(), this);
 		new Metrics(this);
-		GsonBuilder builder = new GsonBuilder();
-		builder.registerTypeAdapter(Location.class, new LocationAdapter());
-		builder.setPrettyPrinting();
-		gson = builder.create();
+		gson = new GsonBuilder().registerTypeAdapter(Location.class, new LocationAdapter()).setPrettyPrinting()
+				.serializeNulls().excludeFieldsWithoutExposeAnnotation().create();
 		AreaData.loadData();
 		info("Plugin Loaded Successfully!");
 	}
