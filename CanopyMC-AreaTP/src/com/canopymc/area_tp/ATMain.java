@@ -11,15 +11,16 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import com.canopymc.area_tp.commands.ATPReloadCMD;
-import com.canopymc.area_tp.commands.AreaDelhomeCMD;
-import com.canopymc.area_tp.commands.AreaHomeCMD;
+import com.canopymc.area_tp.commands.AbstractCommand;
 import com.canopymc.area_tp.commands.AreaSethomeCMD;
 import com.canopymc.area_tp.commands.AreaTPCMD;
-import com.canopymc.area_tp.common.AreaData;
+import com.canopymc.area_tp.common.CustomClaimData;
 import com.canopymc.area_tp.common.LocationAdapter;
+import com.canopymc.area_tp.tasks.AutoSaveDataTask;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -30,6 +31,7 @@ public class ATMain extends JavaPlugin {
 	private static Gson gson;
 
 	private static HashMap<UUID, BukkitTask> delays = new HashMap<>();
+	private static AutoSaveDataTask saveDataTask = new AutoSaveDataTask();
 
 	public void onEnable() {
 		if (!pm.isPluginEnabled("GriefPrevention")) {
@@ -40,30 +42,35 @@ public class ATMain extends JavaPlugin {
 		}
 		instance = this;
 		Settings.updateSettings();
-		AreaHomeCMD cmd = new AreaHomeCMD();
+		AbstractCommand.registerCommands();
 		getCommand("areateleport").setExecutor(new AreaTPCMD());
 		getCommand("atpreload").setExecutor(new ATPReloadCMD());
-		getCommand("areahome").setExecutor(cmd);
-		getCommand("areadelhome").setExecutor(new AreaDelhomeCMD());
 		getCommand("areasethome").setExecutor(new AreaSethomeCMD());
-		getCommand("areahomes").setExecutor(cmd);
 		pm.registerEvents(new Listeners(), this);
 		new Metrics(this);
 		gson = new GsonBuilder().registerTypeAdapter(Location.class, new LocationAdapter()).setPrettyPrinting()
 				.serializeNulls().excludeFieldsWithoutExposeAnnotation().create();
-		AreaData.loadData();
+		new BukkitRunnable() {
+			public void run() {
+				CustomClaimData.loadAll();
+			}
+		}.runTaskAsynchronously(this);
+		saveDataTask.runTaskTimerAsynchronously(this, 60, 60);
 		info("Plugin Loaded Successfully!");
 	}
 
 	public void onDisable() {
 		getCommand("areateleport").setExecutor(null);
 		getCommand("atpreload").setExecutor(null);
-		getCommand("areahome").setExecutor(null);
-		getCommand("areadelhome").setExecutor(null);
-		getCommand("areasethome").setExecutor(null);
 		getCommand("areahomes").setExecutor(null);
 		HandlerList.unregisterAll((Plugin) this);
-		AreaData.saveData();
+		saveDataTask.cancel();
+		new BukkitRunnable() {
+			public void run() {
+				CustomClaimData.saveAll();
+			}
+		}.runTaskAsynchronously(this);
+		gson = null;
 		instance = null;
 	}
 

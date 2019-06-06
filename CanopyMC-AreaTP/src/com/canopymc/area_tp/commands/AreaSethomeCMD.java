@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 
 import com.canopymc.area_tp.ATMain;
 import com.canopymc.area_tp.Settings;
-import com.canopymc.area_tp.common.AreaData;
+import com.canopymc.area_tp.common.CustomClaimData;
 
 import me.ryanhamshire.GriefPrevention.Claim;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
@@ -26,68 +26,13 @@ public class AreaSethomeCMD implements CommandExecutor {
 		Player player = (Player) cs;
 		Claim claim = getValidClaim(player);
 		if (claim != null) {
-			if (AreaData.setAreaHome(claim.getID(), player.getLocation())) {
+			if (CustomClaimData.setLocation(player.getUniqueId(), claim, player.getLocation())) {
 				player.sendMessage("Claim Home Changed Successfully!");
 			} else
-				player.sendMessage("Claim Home Couldn't Be Changed!");
+				player.sendMessage("You must be standing in the claim to set it's home!");
 		}
 		return true;
 	}
-
-	/*public boolean onCommand(CommandSender cs, Command cmd, String alias, String[] args) {
-		if (!(cs instanceof Player)) {
-			if (cs instanceof ConsoleCommandSender) {
-				ATMain.getInstance().info("§cOnly ingame players can excute this command");
-			} else
-				cs.sendMessage("§cOnly ingame players can excute this command");
-			return true;
-		}
-		Player player = (Player) cs;
-		Claim claim = getValidClaim(player);
-		if (claim != null) {
-			AreaDataOld original = AreaDataOld.getData(player.getUniqueId(), claim.getID());
-
-			if (args.length < 1) {
-				if (original != null) {
-					original.setHome(player.getLocation());
-					cs.sendMessage("Claim Home Updated!");
-					return true;
-				}
-				cs.sendMessage("§cYou need to specify a name for this Claim Home.\n§7>> §r/" + alias + " <name>");
-				return true;
-			}
-
-			String name = args[0];
-
-			AreaDataOld nc = AreaDataOld.getData(player.getUniqueId(), name);
-
-			if (original == null && nc == null) {
-				AreaDataOld.createData(claim, name, player);
-				cs.sendMessage(String.format(
-						"§aClaim home set to your location!\n§7>> §eUse §7/home %s §eto return to this location.",
-						name));
-				return true;
-			}
-
-			if (nc == null) {
-				original.setName(name);
-				original.setHome(player.getLocation());
-				cs.sendMessage("§aHome location and name have been updated!");
-				return true;
-			}
-
-			if (original == null || !original.equals(nc)) {
-				cs.sendMessage("§cYou already have another home using that name!");
-				return true;
-			}
-
-			original.setHome(player.getLocation());
-			cs.sendMessage(String.format(
-					"§aClaim home set to your location!\n§7>> §eUse §7/home %s §eto return to this location.",
-					original.getName()));
-		}
-		return true;
-	}*/
 
 	private Claim getValidClaim(Player player) {
 		Claim claim = GriefPrevention.instance.dataStore.getClaimAt(player.getLocation(), true, null);

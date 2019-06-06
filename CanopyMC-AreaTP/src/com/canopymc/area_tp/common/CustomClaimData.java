@@ -4,12 +4,15 @@
 
 package com.canopymc.area_tp.common;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.annotation.Nonnull;
@@ -21,7 +24,9 @@ import org.bukkit.entity.Player;
 import com.canopymc.area_tp.ATMain;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
+import com.google.common.primitives.Ints;
 import com.google.gson.annotations.Expose;
+import com.google.gson.reflect.TypeToken;
 
 import me.ryanhamshire.GriefPrevention.Claim;
 import me.ryanhamshire.GriefPrevention.DataStore;
@@ -116,6 +121,16 @@ public class CustomClaimData {
 		return false;
 	}
 
+	public static Set<CustomClaimData> getDataFromOwner(UUID uuid) {
+		HashSet<CustomClaimData> result = new HashSet<>();
+		for (CustomClaimData data : dataCache.values()) {
+			if (data.dataOwner.equals(uuid)) {
+				result.add(data);
+			}
+		}
+		return result;
+	}
+
 	/**
 	 * Sets the {@link Location} of the specified {@link Claim} for the specified
 	 * {@link Player} {@link UUID}. The claim cannot be null. The playerID and
@@ -175,8 +190,62 @@ public class CustomClaimData {
 		int x1 = greater.getBlockX(), x2 = lesser.getBlockX();
 		int z1 = greater.getBlockZ(), z2 = lesser.getBlockZ();
 		int x = (x1 - x2) / 2 + x2, z = (z1 - z2) / 2 + z2, y = lesser.getWorld().getHighestBlockYAt(x, z);
-
 		return new Location(lesser.getWorld(), x + 0.5, y, z + 0.5);
 	}
 
+	public static void loadAll() {
+		for (File file : dataBase.listFiles()) {
+			Integer claimID = Ints.tryParse(file.getName());
+			if (!file.isDirectory() || claimID == null)
+				continue;
+			for (File inner : file.listFiles()) {
+				String name = inner.getName();
+				if (!inner.isFile() || !name.endsWith(".json"))
+					continue;
+				try {
+					BufferedReader in = new BufferedReader(new FileReader(inner));
+					CustomClaimData data = ATMain.getGson().fromJson(in, new TypeToken<CustomClaimData>() {
+					}.getType());
+					data.insert();
+					in.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	protected void insert() {
+		if (datastore.getClaim(claimID) == null || claimLocation == null && customName == null) {
+			File file = new File(dataBase + File.separator + claimID);
+			if (file.exists()) {
+				try {
+					FileUtils.deleteDirectory(file);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			return;
+		}
+		dataCache.put(claimID, dataOwner, this);
+	}
+
+	public boolean hasName() {
+		return customName != null;
+	}
+
+	public long getClaimID() {
+		return claimID;
+	}
+
+	public Location getClaimLocation() {
+		if (claimLocation != null) {
+			return claimLocation;
+		}
+		return getCentreOfClaim(datastore.getClaim(claimID));
+	}
+
+	public String getName() {
+		return customName;
+	}
 }

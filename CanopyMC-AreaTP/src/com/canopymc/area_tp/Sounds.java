@@ -52,7 +52,7 @@ class CustomSound {
 	private int highestVersion;
 	private String name;
 
-	public CustomSound(String soundName, int highestVersion) {
+	CustomSound(String soundName, int highestVersion) {
 		name = soundName;
 		this.highestVersion = highestVersion;
 	}

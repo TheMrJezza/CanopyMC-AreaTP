@@ -17,7 +17,7 @@ import org.bukkit.scheduler.BukkitTask;
 import com.canopymc.area_tp.ATMain;
 import com.canopymc.area_tp.Settings;
 import com.canopymc.area_tp.Sounds;
-import com.canopymc.area_tp.common.AreaData;
+import com.canopymc.area_tp.common.CustomClaimData;
 import com.google.common.primitives.Ints;
 
 import me.ryanhamshire.GriefPrevention.Claim;
@@ -98,11 +98,7 @@ public class AreaTPCMD implements CommandExecutor {
 			current.cancel();
 		}
 
-		Location home = AreaData.getAreaHome(claim.getID());
-		if (home == null) {
-			ATMain.getInstance().info("HOME Location was NUll for AreaTP! Tell TheMrJezza.");
-			return;
-		}
+		Location home = CustomClaimData.getLocation(player.getUniqueId(), claim);// AreaData.getAreaHome(claim.getID());
 
 		int delay = (int) (20 * Settings.getTeleportDelay());
 		if (delay > 0) {
@@ -142,8 +138,8 @@ public class AreaTPCMD implements CommandExecutor {
 		StringBuilder builder = new StringBuilder("§7==§6ID§7======[§6Available Claims§7]==========\n \n");
 
 		for (int i = 0; i < claims.size(); i++) {
-			Location centre = AreaData.getAreaHome(claims.get(i).getID());
-			builder.append(String.format(" §7- §6%s §7(near X: §6%S §7Z: §6%s §7World: §6%s§7)\n", i,
+			Location centre = CustomClaimData.getLocation(dataOwner, claims.get(i));//AreaData.getAreaHome(claims.get(i).getID());
+			builder.append(String.format(" §7- §6%s §7(near X: §6%S §7Z: §6%s §7World: §6%s§7)\n", CustomClaimData.getName(dataOwner, claims.get(i)),
 					centre.getBlockX(), centre.getBlockZ(), centre.getWorld().getName()));
 		}
 
